@@ -1,28 +1,30 @@
-let searchBtn = document.getElementById('search')
-//let inpt = document.getElementById('input')
-let randomj = document.getElementById('upd')
+const searchBtn = document.getElementById("search");
+const randomJokeContainer = document.getElementById("upd");
 
-let http = new XMLHttpRequest()
+if (searchBtn && randomJokeContainer) {
+  searchBtn.addEventListener("click", function () {
+    randomJokeContainer.innerHTML = "";
 
+    const http = new XMLHttpRequest();
 
-searchBtn.addEventListener("click",function(){
-   // e.preventDefault();
-    randomj.innerHTML='';
-    //var inptVal = inpt.value;
-    // http.open('GET', 'https://official-joke-api.appspot.com/jokes/random');
-    http.open('GET',' https:v2.jokeapi.dev/joke/Programming?format=txt&type=twopart');
-      //no  http.responseType='json'
-        http.onreadystatechange = function() {
-            if (http.readyState === 4 && http.status === 200) {
-                let myButton = http.response
+    http.open(
+      "GET",
+      "https://v2.jokeapi.dev/joke/Programming?format=txt&type=twopart",
+    );
 
-              // you can  console.log(myButton)
-            var randomJoke = document.createElement('h3')
-            randomJoke.innerHTML = myButton
-                randomj.append(randomJoke)
-                
-            }
-        };
-        http.send()
+    http.onreadystatechange = function () {
+      if (http.readyState === 4) {
+        if (http.status === 200) {
+          const jokeText = http.response;
+          const jokeElement = document.createElement("h3");
+          jokeElement.textContent = jokeText;
+          randomJokeContainer.appendChild(jokeElement);
+        } else {
+          randomJokeContainer.textContent = "Unable to fetch a joke right now.";
+        }
+      }
+    };
 
-})
+    http.send();
+  });
+}
